@@ -75,3 +75,4 @@ dump.rdb
 
 # Docker
 .dockerignore
+.env
