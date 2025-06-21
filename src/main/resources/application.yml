@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: booking-system-api
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/booking_system?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: booking_user
+    password: booking_password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+  
+  redis:
+    host: localhost
+    port: 6379
+    password: redis_password
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+  
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000
+
+jwt:
+  secret: booking-system-secret-key-2024-very-long-secret-key-for-security
+  expiration: 86400000 # 24 hours
+
+app:
+  email:
+    verification-url: http://localhost:8080/api/auth/verify-email
+  booking:
+    cancellation-hours: 4
+  scheduler:
+    enabled: true
+
+logging:
+  level:
+    com.bookingsystem: DEBUG
+    org.springframework.security: DEBUG
