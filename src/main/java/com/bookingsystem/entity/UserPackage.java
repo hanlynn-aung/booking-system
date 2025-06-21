@@ -3,11 +3,20 @@ package com.bookingsystem.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_packages")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserPackage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +35,8 @@ public class UserPackage {
     private Integer remainingCredits;
 
     @NotNull
-    private LocalDateTime purchaseDate;
+    @Builder.Default
+    private LocalDateTime purchaseDate = LocalDateTime.now();
 
     @NotNull
     private LocalDateTime expiryDate;
@@ -37,16 +47,17 @@ public class UserPackage {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
+    @Builder.Default
     private UserPackageStatus status = UserPackageStatus.ACTIVE;
 
     @Column(updatable = false)
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // Constructors
-    public UserPackage() {}
-
+    // Custom constructor
     public UserPackage(User user, Package packageEntity, Integer remainingCredits, LocalDateTime expiryDate, BigDecimal paidAmount) {
         this.user = user;
         this.packageEntity = packageEntity;
@@ -54,38 +65,10 @@ public class UserPackage {
         this.purchaseDate = LocalDateTime.now();
         this.expiryDate = expiryDate;
         this.paidAmount = paidAmount;
+        this.status = UserPackageStatus.ACTIVE;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-
-    public Package getPackageEntity() { return packageEntity; }
-    public void setPackageEntity(Package packageEntity) { this.packageEntity = packageEntity; }
-
-    public Integer getRemainingCredits() { return remainingCredits; }
-    public void setRemainingCredits(Integer remainingCredits) { this.remainingCredits = remainingCredits; }
-
-    public LocalDateTime getPurchaseDate() { return purchaseDate; }
-    public void setPurchaseDate(LocalDateTime purchaseDate) { this.purchaseDate = purchaseDate; }
-
-    public LocalDateTime getExpiryDate() { return expiryDate; }
-    public void setExpiryDate(LocalDateTime expiryDate) { this.expiryDate = expiryDate; }
-
-    public BigDecimal getPaidAmount() { return paidAmount; }
-    public void setPaidAmount(BigDecimal paidAmount) { this.paidAmount = paidAmount; }
-
-    public UserPackageStatus getStatus() { return status; }
-    public void setStatus(UserPackageStatus status) { this.status = status; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     @PreUpdate
     protected void onUpdate() {

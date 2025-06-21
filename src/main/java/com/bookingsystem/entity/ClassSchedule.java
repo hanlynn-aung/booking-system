@@ -4,11 +4,20 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "class_schedules")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ClassSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,19 +60,20 @@ public class ClassSchedule {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
+    @Builder.Default
     private ClassStatus status = ClassStatus.SCHEDULED;
 
     @Column(updatable = false)
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "classSchedule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ClassBooking> bookings;
 
-    // Constructors
-    public ClassSchedule() {}
-
+    // Custom constructor
     public ClassSchedule(String className, String description, String instructor, LocalDateTime startTime, 
                         LocalDateTime endTime, Integer maxCapacity, Integer requiredCredits, String country, String location) {
         this.className = className;
@@ -75,53 +85,10 @@ public class ClassSchedule {
         this.requiredCredits = requiredCredits;
         this.country = country;
         this.location = location;
+        this.status = ClassStatus.SCHEDULED;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
-
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getClassName() { return className; }
-    public void setClassName(String className) { this.className = className; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public String getInstructor() { return instructor; }
-    public void setInstructor(String instructor) { this.instructor = instructor; }
-
-    public LocalDateTime getStartTime() { return startTime; }
-    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
-
-    public LocalDateTime getEndTime() { return endTime; }
-    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
-
-    public Integer getMaxCapacity() { return maxCapacity; }
-    public void setMaxCapacity(Integer maxCapacity) { this.maxCapacity = maxCapacity; }
-
-    public Integer getRequiredCredits() { return requiredCredits; }
-    public void setRequiredCredits(Integer requiredCredits) { this.requiredCredits = requiredCredits; }
-
-    public String getCountry() { return country; }
-    public void setCountry(String country) { this.country = country; }
-
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
-    public String getClassType() { return classType; }
-    public void setClassType(String classType) { this.classType = classType; }
-
-    public ClassStatus getStatus() { return status; }
-    public void setStatus(ClassStatus status) { this.status = status; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
-
-    public Set<ClassBooking> getBookings() { return bookings; }
-    public void setBookings(Set<ClassBooking> bookings) { this.bookings = bookings; }
 
     @PreUpdate
     protected void onUpdate() {
