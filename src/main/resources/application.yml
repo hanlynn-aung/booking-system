@@ -25,7 +25,9 @@ spring:
       time-to-live: 600000
   data:
     redis:
-      host: localhost
+      host: ${SPRING_REDIS_HOST:localhost}
+      password: ${SPRING_REDIS_PASSWORD:}
+      port: ${SPRING_REDIS_PORT:6379}
 
 # Swagger/OpenAPI Configuration
 springdoc:
