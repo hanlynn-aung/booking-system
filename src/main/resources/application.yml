@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: booking-system-api
+  app:
+    jwt:
+      password: d2Fzd29uZGVyZmlsbG5vaXNlc3BsaXRjcm93ZHNob3R1bmRlcmFycm93dGhyb3VnaG7=
+      expiration-time: 8.64e+7
   
   datasource:
     url: jdbc:mysql://localhost:3306/booking_system?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
@@ -25,9 +29,9 @@ spring:
       time-to-live: 600000
   data:
     redis:
-      host: ${SPRING_REDIS_HOST:localhost}
-      password: ${SPRING_REDIS_PASSWORD:}
-      port: ${SPRING_REDIS_PORT:6379}
+      host: localhost
+      port: 6379
+      password: redis_password
 
 # Swagger/OpenAPI Configuration
 springdoc:
@@ -42,11 +46,7 @@ springdoc:
     filter: true
   show-actuator: false
   default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-
-jwt:
-  secret: booking-system-secret-key-2024-very-long-secret-key-for-security
-  expiration: 86400000 # 24 hours
+  default-produces-media-type: application/json # 24 hours
 
 app:
   email:

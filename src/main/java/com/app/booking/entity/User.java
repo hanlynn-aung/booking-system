@@ -1,5 +1,6 @@
 package com.app.booking.entity;
 
+import com.app.booking.common.constant.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -88,12 +89,5 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    public enum UserStatus {
-        PENDING_VERIFICATION,
-        ACTIVE,
-        SUSPENDED,
-        INACTIVE
     }
 }

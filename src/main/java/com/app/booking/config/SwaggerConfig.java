@@ -14,14 +14,13 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
+                        .addSecuritySchemes("bearer-key",
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
-                                        .bearerFormat("JWT")))
-                .info(new Info()
-                        .title("Booking System API")
-                        .description("Mobile Application Booking System API")
-                        .version("1.0.0"));
+                                        .bearerFormat("JWT"))
+                        .addSecuritySchemes("basic-auth", new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("basic")));
     }
 }

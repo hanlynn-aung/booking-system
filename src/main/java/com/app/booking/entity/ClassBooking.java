@@ -1,5 +1,6 @@
 package com.app.booking.entity;
 
+import com.app.booking.common.constant.BookingStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -68,13 +69,5 @@ public class ClassBooking {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-    }
-
-    public enum BookingStatus {
-        BOOKED,
-        WAITLISTED,
-        CANCELLED,
-        CHECKED_IN,
-        NO_SHOW
     }
 }

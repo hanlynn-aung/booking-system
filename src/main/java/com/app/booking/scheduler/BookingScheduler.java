@@ -1,5 +1,8 @@
 package com.app.booking.scheduler;
 
+import com.app.booking.common.constant.BookingStatus;
+import com.app.booking.common.constant.ClassStatus;
+import com.app.booking.common.constant.UserPackageStatus;
 import com.app.booking.entity.ClassBooking;
 import com.app.booking.entity.ClassSchedule;
 import com.app.booking.entity.UserPackage;
@@ -33,23 +36,23 @@ public class BookingScheduler {
         
         // Find classes that have ended
         List<ClassSchedule> completedClasses = classScheduleRepository.findByStatusAndEndTimeBefore(
-                ClassSchedule.ClassStatus.SCHEDULED, now);
+                ClassStatus.SCHEDULED, now);
 
         for (ClassSchedule classSchedule : completedClasses) {
             // Update class status
-            classSchedule.setStatus(ClassSchedule.ClassStatus.COMPLETED);
+            classSchedule.setStatus(ClassStatus.COMPLETED);
             classScheduleRepository.save(classSchedule);
 
             // Refund credits for waitlisted users
             List<ClassBooking> waitlistedBookings = classBookingRepository.findByClassScheduleAndStatus(
-                    classSchedule, ClassBooking.BookingStatus.WAITLISTED);
+                    classSchedule, BookingStatus.WAITLISTED);
 
             for (ClassBooking booking : waitlistedBookings) {
                 UserPackage userPackage = booking.getUserPackage();
                 userPackage.setRemainingCredits(userPackage.getRemainingCredits() + classSchedule.getRequiredCredits());
                 userPackageRepository.save(userPackage);
 
-                booking.setStatus(ClassBooking.BookingStatus.CANCELLED);
+                booking.setStatus(BookingStatus.CANCELLED);
                 booking.setCancellationTime(now);
                 classBookingRepository.save(booking);
             }
@@ -65,8 +68,8 @@ public class BookingScheduler {
         List<UserPackage> allPackages = userPackageRepository.findAll();
         
         for (UserPackage userPackage : allPackages) {
-            if (userPackage.isExpired() && userPackage.getStatus() == UserPackage.UserPackageStatus.ACTIVE) {
-                userPackage.setStatus(UserPackage.UserPackageStatus.EXPIRED);
+            if (userPackage.isExpired() && userPackage.getStatus() == UserPackageStatus.ACTIVE) {
+                userPackage.setStatus(UserPackageStatus.EXPIRED);
                 userPackageRepository.save(userPackage);
             }
         }
