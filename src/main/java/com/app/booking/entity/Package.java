@@ -43,7 +43,7 @@ public class Package {
     private Integer validityDays;
 
     @NotBlank
-    @Column(length = 10)
+    @Column(length = 20)
     private String country;
 
     @Enumerated(EnumType.STRING)

@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setVerificationToken(UUID.randomUUID().toString());
-        user.setVerificationTokenExpiry(LocalDateTime.now().plusHours(24));
+        user.setVerificationTokenExpiry(LocalDateTime.now().plusHours(1));
 
         User savedUser = userRepository.save(user);
         
