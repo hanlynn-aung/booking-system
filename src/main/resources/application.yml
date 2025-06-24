@@ -46,20 +46,24 @@ springdoc:
     filter: true
   show-actuator: false
   default-consumes-media-type: application/json
-  default-produces-media-type: application/json # 24 hours
+  default-produces-media-type: application/json
 
 app:
   email:
     verification-url: http://localhost:8080/api/auth/verify-email
   booking:
     cancellation-hours: 4
+    checkin-before-minutes: 15
+    checkin-after-minutes: 30
+    booking-cutoff-minutes: 30
   scheduler:
     enabled: true
 
 logging:
   level:
-    com.bookingsystem: DEBUG
+    com.app.booking: DEBUG
     org.springframework.security: DEBUG
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    root: INFO
